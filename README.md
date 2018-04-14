@@ -1,10 +1,10 @@
-# habr-search-front
+# search-ui
 
 > A Vue.js project
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
