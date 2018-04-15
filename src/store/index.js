@@ -11,10 +11,8 @@ Vue.use(Vuex);
 const debug = process.env.NODE_ENV !== 'production';
 
 const state = {
-  postsList: [],
-  postsTotal: 0,
-  commentsList: [],
-  commentsTotal: 0,
+  list: [],
+  total: 0,
   isLoading: false,
 };
 

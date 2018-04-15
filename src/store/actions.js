@@ -1,18 +1,19 @@
 import { ADD_TOAST_MESSAGE } from 'vuex-toast';
 import Api from '@/api';
 import routes from '@/api/routes';
-import paramsTransformer from '@/utils/paramsTransformer';
 import resultGetter from '@/utils/resultGetter';
 import types from './mutation-types';
 
 export const getPostsByQuery = (context, pload) => {
   const { commit, dispatch } = context;
-  const { query } = pload;
+  const { query, limit, offset } = pload;
 
   commit(types.POSTS_GET_BY_QUERY.REQUEST);
 
   const params = {
     query,
+    limit,
+    offset,
   };
 
   Api.get(routes.searchPosts, params)
@@ -49,12 +50,14 @@ export const getPostsByQuery = (context, pload) => {
 
 export const getCommentsByQuery = (context, pload) => {
   const { commit, dispatch } = context;
-  const { db, query } = pload;
+  const { query, limit, offset } = pload;
 
   commit(types.COMMENTS_GET_BY_QUERY.REQUEST);
 
   const params = {
     query,
+    limit,
+    offset,
   };
 
   Api.get(routes.searchComments, params)

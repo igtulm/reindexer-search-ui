@@ -124,6 +124,15 @@ export default {
       this.$emit('onchange', this.pageSelected);
     }
   },
+
+  watch: {
+    page(newPage) {
+      this.pageListOffset = this.itemsPerPage * (Math.ceil(newPage / this.itemsPerPage) - 1) + 1;
+      this.pageSelected = newPage;
+
+      return newPage;
+    },
+  },
 };
 </script>
 

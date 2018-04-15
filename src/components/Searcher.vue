@@ -35,7 +35,7 @@ export default {
 <style scoped>
 .search-wrapper {
   display: grid;
-  grid-template-columns: 35px 138px 450px 100px;
+  grid-template-columns: 35px 138px 500px 100px;
   font-family: "Lucida Console", Monaco, monospace;
 }
 
