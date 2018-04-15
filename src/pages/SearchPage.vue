@@ -71,7 +71,7 @@ export default {
       this.$store.dispatch(action, params).then(() => {
         this.$router.push({ path: webroutes.searchPage, query: { query: this.searchString } });
       });
-    }, 500),
+    }, 250),
 
     onSearch(value) {
       const params = {
