@@ -6,7 +6,7 @@ import types from './mutation-types';
 
 export const getPostsByQuery = (context, pload) => {
   const { commit, dispatch } = context;
-  const { query, limit, offset } = pload;
+  const { query, limit = 10, offset = 0 } = pload;
 
   commit(types.POSTS_GET_BY_QUERY.REQUEST);
 
@@ -50,7 +50,7 @@ export const getPostsByQuery = (context, pload) => {
 
 export const getCommentsByQuery = (context, pload) => {
   const { commit, dispatch } = context;
-  const { query, limit, offset } = pload;
+  const { query, limit = 10, offset = 0 } = pload;
 
   commit(types.COMMENTS_GET_BY_QUERY.REQUEST);
 

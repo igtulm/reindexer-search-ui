@@ -1,19 +1,25 @@
 <template>
   <div class="viewer-container">
+    <div v-if="!itemsAreProvided">
+      <span class="noresults">No results</span>
+    </div>
     <div v-for="item in items" class="item">
       <a :href="item.link">{{ item.title || item.link }}</a>
-      <div class="flex-wrapper">
+      <div class="description-wrapper">
         <img class="image" v-if="item.image" :src="item.image">
-        <span class="description">{{ item.text }}</span>
+        <span class="description" v-html="item.text" />
+        <div class="clear" />
       </div>
       <span class="user">User: {{ item.user }}</span>
-      <span class="time">Datetime: {{ getTime(item.time) }}</span>
+      <span class="time">Datetime: {{ getDateTime(item.time) }}</span>
       <div class="clear" />
     </div>
   </div>
 </template>
 
 <script>
+import _ from 'lodash';
+
 export default {
   name: 'viewer',
 
@@ -24,8 +30,14 @@ export default {
     },
   },
 
+  computed: {
+    itemsAreProvided() {
+      return !!_.size(this.items);
+    },
+  },
+
   methods: {
-    getTime(epoch) {
+    getDateTime(epoch) {
       return new Date(epoch * 1000);
     },
   },
@@ -34,18 +46,16 @@ export default {
 
 <style scoped>
 .viewer-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex-wrap: wrap;
-
   min-width: 600px;
+}
+
+.noresults {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 18px;
 }
 
 .item {
   font-family: "Lucida Console", Monaco, monospace;
-
-
   border-bottom: 1px solid #626262;
   margin: 3px;
   padding: 10px 0 10px;
@@ -56,21 +66,20 @@ export default {
   font-size: 18px;
 }
 
-.flex-wrapper {
-  display: flex;
-  align-items: center;
-  min-width: 600px;
-  margin: 5px 0;
+.description-wrapper {
+  margin: 10px 0;
 }
 
 .image {
-  flex-grow: 0;
-  flex-shrink: 0;
+  float: left;
+  max-width: 100px;
+  max-height: 100px;
+  width: auto;
   height: 100px;
-  width: 100px;
 }
 
 .description {
+  float: left;
   font-size: 12px;
   margin: 10px 0 10px 10px;
 }
@@ -85,7 +94,7 @@ export default {
   float: right;
 }
 
-.div {
+.clear {
   clear: both;
 }
 </style>

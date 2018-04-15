@@ -56,9 +56,22 @@ export default {
   },
 
   methods: {
-    onInput(value) {
-      // console.log('Input: ', value);
-    },
+    onInput: _.debounce(function(value) {
+      this.page = 1;
+
+      const params = {
+        query: this.searchString,
+        limit: this.limit,
+        offset: (this.page - 1) * this.limit,
+      };
+
+      // TODO need refactoring
+      const action = this.tabNumSelected == 0 ? 'getPostsByQuery' : 'getCommentsByQuery';
+
+      this.$store.dispatch(action, params).then(() => {
+        this.$router.push({ path: webroutes.searchPage, query: { query: this.searchString } });
+      });
+    }, 500),
 
     onSearch(value) {
       const params = {
@@ -78,6 +91,7 @@ export default {
     onTabSelect(value) {
       this.tabNumSelected = value;
       this.page = 1;
+      this.offset = 0;
 
       // TODO need refactoring
       const action = this.tabNumSelected == 0 ? 'getPostsByQuery' : 'getCommentsByQuery';
