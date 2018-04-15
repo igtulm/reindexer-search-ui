@@ -39,8 +39,7 @@ export default {
   align-items: center;
   flex-wrap: wrap;
 
-  min-width: 320px;
-  max-width: 600px;
+  min-width: 600px;
 }
 
 .item {
@@ -60,7 +59,8 @@ export default {
 .flex-wrapper {
   display: flex;
   align-items: center;
-  width: 100%;
+  min-width: 600px;
+  margin: 5px 0;
 }
 
 .image {
