@@ -1,5 +1,5 @@
 import ApiClient from './ApiClient';
 
-const baseApiUrl = '/';
+const baseApiUrl = '/api';
 
 export default new ApiClient(baseApiUrl);

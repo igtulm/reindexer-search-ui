@@ -35,18 +35,20 @@ export default {
 <style scoped>
 .search-wrapper {
   display: grid;
-  grid-template-columns: 40px 160px 450px 100px;
+  grid-template-columns: 35px 138px 450px 100px;
   font-family: "Lucida Console", Monaco, monospace;
-  width: 100%;
 }
 
 .logo {
+  user-select: none;
   margin-top: 15px;
 }
 
 .name {
+  user-select: none;
   font-size: 24px;
   margin-top: 25px;
+  text-align: left;
 }
 
 .field {
@@ -58,6 +60,7 @@ export default {
 }
 
 .btn {
+  user-select: none;
   height: 38px;
   margin-top: 20px;
   font-size: 18px;

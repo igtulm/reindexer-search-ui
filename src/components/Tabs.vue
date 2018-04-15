@@ -54,11 +54,12 @@ export default {
 <style scoped>
 .tabs {
   font-family: "Lucida Console", Monaco, monospace;
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .tabs li {
   display: inline-block;
+  user-select: none;
   cursor: pointer;
   margin-right: 10px;
 }

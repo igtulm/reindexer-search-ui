@@ -3,18 +3,31 @@ import Vuex from 'vuex';
 import createLogger from 'vuex/dist/logger';
 import { createModule } from 'vuex-toast';
 
-import posts from './modules/posts';
-import comments from './modules/comments';
+import * as actions from './actions';
+import mutations from './mutations';
 
 Vue.use(Vuex);
 
 const debug = process.env.NODE_ENV !== 'production';
 
+const state = {
+  postsList: [],
+  postsTotal: 0,
+  commentsList: [],
+  commentsTotal: 0,
+  isLoading: false,
+};
+
 export default new Vuex.Store({
   modules: {
-    posts,
-    comments,
+    toast: createModule({
+      dismissInterval: 5000,
+    }),
   },
+  actions,
+  mutations,
+  getters() {},
+  state,
   strict: debug,
   plugins: debug ? [createLogger()] : [],
 });
