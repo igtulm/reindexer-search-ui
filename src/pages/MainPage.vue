@@ -27,7 +27,8 @@
       </b-row>
       <b-row class="mt-4">
         <b-col>
-          <snippet-post v-for="item in list"
+          <snippet-post v-for="item, index in list"
+            :key="index"
             :user="item.user"
             :time="item.time"
             :title="item.title"

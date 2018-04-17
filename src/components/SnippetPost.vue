@@ -3,7 +3,7 @@
     <header>
       <span class="image" />
       <span class="username">{{ user }}</span>
-      <span class="time">{{ time }}</span>
+      <span class="time">{{ customDateTimeFormat(time) }}</span>
       <div class="clear" />
     </header>
     <p><a class="title" href="#" @click.prevent="goToLink(link)">{{ title }}</a></p>
@@ -40,6 +40,7 @@
 
 <script>
 import _ from 'lodash';
+import * as moment from 'moment';
 import Octicon from 'vue-octicon/components/Octicon';
 
 export default {
@@ -56,7 +57,7 @@ export default {
     },
 
     time: {
-      type: String,
+      type: Number,
       default: '',
     },
 
@@ -111,6 +112,10 @@ export default {
     goToLink(url) {
       const win = window.open(url, '_blank');
       win.focus();
+    },
+
+    customDateTimeFormat(date) {
+      return moment.unix(date).format("DD.MM.YYYY HH:MM");
     },
   },
 };
