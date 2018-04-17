@@ -27,7 +27,8 @@
       </b-row>
       <b-row class="mt-4">
         <b-col>
-          <snippet-post v-for="item, index in list"
+          <!--TODO: Use dynamic component!-->
+          <snippet-post v-if="searchMode === searchSettings[0].text" v-for="item, index in list"
             :key="index"
             :user="item.user"
             :time="item.time"
@@ -40,6 +41,15 @@
             :likes="item.likes"
             :favorites="item.favorites"
             :views="item.views"
+          />
+          <!--TODO: Use dynamic component!-->
+          <snippet-comment v-if="searchMode === searchSettings[1].text" v-for="item, index in list"
+            :key="index"
+            :user="item.user"
+            :time="item.time"
+            :link="item.link"
+            :text="item.text"
+            :likes="item.likes"
           />
         </b-col>
       </b-row>
@@ -56,16 +66,16 @@
 import _ from 'lodash';
 import { mapState } from 'vuex';
 import { Toast } from 'vuex-toast';
-import Viewer from '@/components/Viewer';
 import SnippetPost from '@/components/SnippetPost';
+import SnippetComment from '@/components/SnippetComment';
 
 export default {
   name: 'search-page',
 
   components: {
     Toast,
-    Viewer,
     SnippetPost,
+    SnippetComment,
   },
 
   props: {

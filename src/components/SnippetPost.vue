@@ -134,10 +134,11 @@ export default {
 </script>
 
 <style scoped>
+/* Styles are taken from original site for speed up the development. Need to remove redundant! */
 .snippet {
   width: 780px;
   overflow: hidden;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
   max-height: 850px;
 }
 
@@ -198,6 +199,7 @@ export default {
   max-height: 70px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .hubs li {
@@ -223,6 +225,7 @@ export default {
   max-height: 70px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tags li {
@@ -249,6 +252,7 @@ export default {
   max-height: 102px;
   height: auto;
   margin-top: 10px;
+  white-space: nowrap;
 }
 
 .content-image {
@@ -313,6 +317,7 @@ export default {
   list-style: none;
   border: 1px solid #e5e9eb;
   height: 40px;
+  white-space: nowrap;
 }
 
 .signs-icon {
