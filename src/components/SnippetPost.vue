@@ -136,7 +136,6 @@ export default {
 <style scoped>
 .snippet {
   width: 780px;
-  min-height: 400px;
   overflow: hidden;
   margin-bottom: 10px;
   max-height: 850px;
