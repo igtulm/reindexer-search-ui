@@ -38,6 +38,7 @@
             :tags="item.tags"
             :hubs="item.hubs"
             :likes="item.likes"
+            :favorites="item.favorites"
             :views="item.views"
           />
         </b-col>

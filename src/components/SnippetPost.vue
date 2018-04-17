@@ -28,6 +28,12 @@
           <span class="signs-value">{{ likes }}</span>
         </li>
         <li class="signs-icon">
+          <octicon name="bookmark" />
+        </li>
+        <li>
+          <span class="signs-value">{{ favorites }}</span>
+        </li>
+        <li class="signs-icon">
           <octicon name="eye" />
         </li>
         <li>
@@ -96,6 +102,11 @@ export default {
       default: 0,
     },
 
+    favorites: {
+      type: Number,
+      default: 0,
+    },
+
     views: {
       type: Number,
       default: 0,
@@ -114,6 +125,7 @@ export default {
       win.focus();
     },
 
+    // TODO refactoring: this component must be dumb
     customDateTimeFormat(date) {
       return moment.unix(date).format("DD.MM.YYYY HH:MM");
     },
@@ -126,7 +138,7 @@ export default {
   width: 780px;
   min-height: 400px;
   overflow: hidden;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   max-height: 850px;
 }
 
