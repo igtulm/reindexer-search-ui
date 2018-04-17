@@ -25,15 +25,28 @@
           </b-form>
         </b-col>
       </b-row>
+      <b-row class="mt-4">
+        <b-col>
+          <snippet-post v-for="item in list"
+            :user="item.user"
+            :time="item.time"
+            :title="item.title"
+            :link="item.link"
+            :image="item.image"
+            :text="item.text"
+            :tags="item.tags"
+            :hubs="item.hubs"
+            :likes="item.likes"
+            :views="item.views"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-pagination v-if="total" size="md" hide-ellipsis :limit="params.limit" :total-rows="total"
+            :per-page="10" v-model="page" v-on:input="onPaginatorChange">
+        </b-pagination>
+      </b-row>
     </b-container>
-
-    <viewer class="result-viewer" :items="list" />
-
-
-    <b-pagination v-if="total" size="md" hide-ellipsis :limit="params.limit" :total-rows="total"
-        :per-page="10" v-model="page" v-on:input="onPaginatorChange">
-    </b-pagination>
-
   </div>
 </template>
 
@@ -42,6 +55,7 @@ import _ from 'lodash';
 import { mapState } from 'vuex';
 import { Toast } from 'vuex-toast';
 import Viewer from '@/components/Viewer';
+import SnippetPost from '@/components/SnippetPost';
 
 export default {
   name: 'search-page',
@@ -49,6 +63,7 @@ export default {
   components: {
     Toast,
     Viewer,
+    SnippetPost,
   },
 
   props: {
@@ -205,6 +220,6 @@ export default {
 }
 
 .search-field {
-  width: 550px;
+  width: 780px;
 }
 </style>
