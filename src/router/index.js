@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import MainPage from '@/pages/MainPage';
-import SearchPage from '@/pages/SearchPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import webroutes from './webroutes';
 
@@ -15,13 +14,24 @@ export default new Router({
       path: webroutes.mainPage,
       name: 'MainPage',
       component: MainPage,
-      props: route => ({ query: route.query.query }),
-    },
-    {
-      path: webroutes.searchPage,
-      name: 'SearchPage',
-      component: SearchPage,
-      props: route => ({ query: route.query.query }),
+      props: route => {
+        const params = route.query;
+        const { query, searchType, sortBy } = params;
+
+        // TODO refactoring
+        const newParams = {
+          query,
+          searchType,
+          sortBy,
+          limit: parseInt(params.limit, 10) || 10,
+          offset: parseInt(params.offset, 10) || 0,
+          sortDesc: parseInt(params.sortDesc, 10) || 0,
+        };
+
+        return {
+          ...newParams,
+        };
+      },
     },
     {
       path: '*',

@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="search-wrapper">
-        <img class="logo" src="../assets/reindexer-logo.png">
-        <p class="name">Reindexer</p>
+        <!--<img class="logo" src="../assets/reindexer-logo.png">
+        <p class="name">Reindexer</p>-->
         <input class="field" type="text" ref="searchliner" autofocus :value="value" @input="onUpdate()" @keyup.enter="onSearch()"/>
         <button class="btn" v-on:click="onSearch()">Search</button>
     </div>
@@ -34,9 +34,7 @@ export default {
 
 <style scoped>
 .search-wrapper {
-  display: grid;
-  grid-template-columns: 35px 138px 500px 100px;
-  font-family: "Lucida Console", Monaco, monospace;
+
 }
 
 .logo {
@@ -55,7 +53,6 @@ export default {
   height: 32px;
   margin-top: 20px;
   outline: none;
-  font-size: 18px;
   padding-left: 5px;
 }
 
@@ -63,7 +60,6 @@ export default {
   user-select: none;
   height: 38px;
   margin-top: 20px;
-  font-size: 18px;
 }
 
 </style>

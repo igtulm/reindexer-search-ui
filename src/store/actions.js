@@ -4,17 +4,10 @@ import routes from '@/api/routes';
 import resultGetter from '@/utils/resultGetter';
 import types from './mutation-types';
 
-export const getPostsByQuery = (context, pload) => {
+export const getPostsByQuery = (context, params) => {
   const { commit, dispatch } = context;
-  const { query, limit = 10, offset = 0 } = pload;
 
   commit(types.POSTS_GET_BY_QUERY.REQUEST);
-
-  const params = {
-    query,
-    limit,
-    offset,
-  };
 
   Api.get(routes.searchPosts, params)
     .then(
@@ -48,17 +41,10 @@ export const getPostsByQuery = (context, pload) => {
     });
 };
 
-export const getCommentsByQuery = (context, pload) => {
+export const getCommentsByQuery = (context, params) => {
   const { commit, dispatch } = context;
-  const { query, limit = 10, offset = 0 } = pload;
 
   commit(types.COMMENTS_GET_BY_QUERY.REQUEST);
-
-  const params = {
-    query,
-    limit,
-    offset,
-  };
 
   Api.get(routes.searchComments, params)
     .then(

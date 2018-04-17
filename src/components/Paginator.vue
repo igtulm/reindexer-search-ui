@@ -150,8 +150,6 @@ export default {
   height: 25px;
   text-align: center;
   border: 1px solid black;
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 18px;
   float: left;
 }
 
@@ -170,8 +168,6 @@ export default {
 
 .total {
   display: block;
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 18px;
   margin-bottom: 10px;
 }
 </style>
