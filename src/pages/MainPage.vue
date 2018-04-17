@@ -11,13 +11,13 @@
       </b-row>
       <b-row class="mt-3">
         <b-col>
-          <b-input placeholder="Search" autofocus v-model.trim="params.query" @input="onInput" @keydown.enter.native="onSearch" />
+          <b-input class="search-field" placeholder="Search" autofocus v-model.trim="params.query" @input="onInput" @keydown.enter.native="onSearch" />
         </b-col>
       </b-row>
       <b-row class="mt-3">
         <b-col>
           <b-form inline>
-            <b-form-radio-group v-model="searchTypeFake" @change="onSearch">
+            <b-form-radio-group v-model="searchMode" @change="onSortModeChange">
               <b-form-radio v-for="option, index in searchOptions" :key="index" :value="option">{{ option }}</b-form-radio>
             </b-form-radio-group>
             <b-form-select v-model="params.sortBy" :options="sortOptions" @change="onSearch" />
@@ -116,6 +116,9 @@ export default {
       text: 'Desc',
     }];
 
+    const findSearchMode = searchSettings.find(item => item.text && item.value === props.searchType);
+    const searchMode = findSearchMode && findSearchMode.text || searchSettings[0].text;
+
     return {
       searchSettings,
       searchOptions: _.map(searchSettings, setting => setting.text),
@@ -125,7 +128,7 @@ export default {
       debounceDefault: 250,
       page: 1,
       tabNumSelected: 0,
-      searchMode: searchSettings[0].text,
+      searchMode,
 
       params: {
         ...props,
@@ -156,37 +159,6 @@ export default {
 
       return _.get(searchSetting, 'action', null);
     },
-
-    searchTypeFake: {
-      get() {
-        if (_.isEmpty(this.searchMode) && _.isEmpty(this.params.searchType)) {
-          const searchSetting = this.searchSettings.find(item => item.text && item.text === this.searchMode);
-          const modeValue = _.get(searchSetting, 'value', this.searchSettings[0].value);
-          const modeText = _.get(searchSetting, 'text', this.searchSettings[0].text);
-          this.params.searchType = modeValue;
-          this.searchMode = modeText;
-
-          return modeText;
-        } else if (!_.isEmpty(this.params.searchType)) {
-          const searchSetting = this.searchSettings.find(item => item.value
-            && item.value === this.params.searchType);
-
-          const modeText = _.get(searchSetting, 'text', this.searchSettings[0].text);
-
-          this.searchMode = modeText;
-        }
-
-        return this.searchMode || this.searchSettings[0].text || null;
-      },
-
-      set(newSearchMode) {
-        if (newSearchMode) {
-          const searchSetting = this.searchSettings.find(item => item.text && item.text === newSearchMode );
-          this.searchMode = searchSetting.text;
-          this.params.searchType = searchSetting.value;
-        }
-      },
-    },
   },
 
   methods: {
@@ -199,7 +171,10 @@ export default {
 
     }, this.debounce),
 
-    onSortModeChange() {
+    onSortModeChange(text) {
+      const searchSetting = this.searchSettings.find(item => item.text === text);
+      this.params.searchType = searchSetting.value;
+
       this.onSearch();
     },
 
@@ -227,5 +202,9 @@ export default {
 <style scoped>
 .logo {
   margin-top: -2px;
+}
+
+.search-field {
+  width: 550px;
 }
 </style>
