@@ -21,42 +21,24 @@
               <b-form-radio v-for="option, index in searchOptions" :key="index" :value="option">{{ option }}</b-form-radio>
             </b-form-radio-group>
             <b-form-select v-model="params.sortBy" :options="sortOptions" @change="onSearch" />
-            <b-form-select class="ml-2" v-model="params.sortDesc" :options="sortDirOptions" @change="onSearch" />
+            <b-form-select
+              class="ml-2"
+              v-model="params.sortDesc"
+              :options="sortDirOptions"
+              :disabled="!isSortTypeDirected"
+              @change="onSearch" />
           </b-form>
         </b-col>
       </b-row>
       <b-row class="mt-4">
         <b-col>
-          <!--TODO: Use dynamic component!-->
-          <snippet-post v-if="searchMode === searchSettings[0].text" v-for="item, index in list"
-            :key="index"
-            :user="item.user"
-            :time="item.time"
-            :title="item.title"
-            :link="item.link"
-            :image="item.image"
-            :text="item.text"
-            :tags="item.tags"
-            :hubs="item.hubs"
-            :likes="item.likes"
-            :favorites="item.favorites"
-            :views="item.views"
-          />
-          <!--TODO: Use dynamic component!-->
-          <snippet-comment v-if="searchMode === searchSettings[1].text" v-for="item, index in list"
-            :key="index"
-            :user="item.user"
-            :time="item.time"
-            :link="item.link"
-            :text="item.text"
-            :likes="item.likes"
-          />
+          <component v-for="item, index in items" :is="component" v-bind="item" :key="index" />
         </b-col>
       </b-row>
       <b-row>
-        <b-pagination v-if="total" size="md" hide-ellipsis :limit="params.limit" :total-rows="total"
+        <!--<b-pagination v-if="total" size="md" hide-ellipsis :limit="params.limit" :total-rows="total"
             :per-page="10" v-model="page" v-on:input="onPaginatorChange">
-        </b-pagination>
+        </b-pagination>-->
       </b-row>
     </b-container>
   </div>
@@ -64,7 +46,7 @@
 
 <script>
 import _ from 'lodash';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { Toast } from 'vuex-toast';
 import SnippetPost from '@/components/SnippetPost';
 import SnippetComment from '@/components/SnippetComment';
@@ -113,26 +95,31 @@ export default {
     const props = this.$props;
 
     const searchSettings = [{
+      name: 'Posts',
       text: 'Posts',
       value: 'posts',
-      action: 'getPostsList',
       debounce: 250,
+      component: SnippetPost,
     }, {
+      name: 'Posts',
       text: 'Comments',
       value: 'comments',
-      action: 'getCommentsList',
       debounce: 100,
+      component: SnippetComment,
     }];
 
     const sortOptions = [{
       value: '',
       text: 'Relevance',
+      isDirected: false,
     }, {
       value: 'time',
       text: 'Time',
+      isDirected: true,
     }, {
       value: 'likes',
       text: 'Likes',
+      isDirected: true,
     }];
 
     const sortDirOptions = [{
@@ -165,35 +152,67 @@ export default {
 
   computed: {
     ...mapState({
-      list: state => state.list,
+      items: state => state.list,
       total: state => state.total,
     }),
 
-    debounce() {
-      const searchSetting = this.searchSettings.find(item => item.text === this.searchMode);
-      if (_.isEmpty(searchSetting)) {
-        return this.debounceDefault;
-      }
-
-      return _.get(searchSetting, 'debounce', this.debounceDefault);
+    currentSetting() {
+      return this.searchSettings.find(item => item &&  item.text === this.searchMode);
     },
 
-    action() {
-      const searchSetting = this.searchSettings.find(item => item.text === this.searchMode);
-      if (_.isEmpty(searchSetting)) {
+    entity() {
+      if (_.isEmpty(this.currentSetting)) {
         return null;
       }
 
-      return _.get(searchSetting, 'action', null);
+      return _.get(this.currentSetting, 'name', null);
+    },
+
+    component() {
+      if (_.isEmpty(this.currentSetting)) {
+        return '';
+      }
+
+      return _.get(this.currentSetting, 'component', '');
+    },
+
+    debounce() {
+      if (_.isEmpty(this.currentSetting)) {
+        return this.debounceDefault;
+      }
+
+      return _.get(this.currentSetting, 'debounce', this.debounceDefault);
+    },
+
+    action() {
+      if (_.isEmpty(this.currentSetting)) {
+        return null;
+      }
+
+      return _.get(this.currentSetting, 'action', null);
+    },
+
+    isSortTypeDirected() {
+      const sortOption = this.sortOptions.find(item => item && item.value === this.params.sortBy) || this.sortOptions[0];
+
+      return sortOption.isDirected || false;
     },
   },
 
   methods: {
-    onSearch: _.debounce(function() {
-      const query = _.pickBy(this.params);
+    ...mapActions({
+      getEntities: 'getEntities',
+    }),
 
-      this.$store.dispatch(this.action, this.params).then(() => {
-        this.$router.push({ path: this.$router.path, query });
+    onSearch: _.debounce(function() {
+      const queryParams = _.pickBy(this.params);
+      const actionParams = {
+        queryParams,
+        entity: this.entity,
+      };
+
+      this.getEntities(actionParams).then(() => {
+        this.$router.push({ path: this.$router.path, queryParams });
       });
 
     }, this.debounce),

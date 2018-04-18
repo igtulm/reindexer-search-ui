@@ -4,26 +4,38 @@ import routes from '@/api/routes';
 import ResultPresenter from '@/presenters/ResultPresenter';
 import types from './mutation-types';
 
-// TODO get entity factory
-
-export const getPostsList = (context, params) => {
+export const getEntities = (context, params) => {
   const { commit, dispatch } = context;
+  const { entity, isGreedy, queryParams } = params;
 
-  commit(types.GET_ENTITY_LIST.REQUEST);
+  let route;
+  switch (entity) {
+    case 'Posts':
+      route = routes.searchPosts;
+      break;
+    case 'Comments':
+      route = routes.searchComments;
+      break;
+    default:
+      return;
+  }
 
-  Api.get(routes.searchPosts, params)
+  commit(types.GET_ENTITIES.REQUEST);
+
+  Api.get(route, queryParams)
     .then(
       response => {
         const { data } = response;
         const payload = {
           list: ResultPresenter.items(data),
           total: ResultPresenter.total(data),
+          isGreedy,
         };
 
-        commit(types.GET_ENTITY_LIST.SUCCESS, payload);
+        commit(types.GET_ENTITIES.SUCCESS, payload);
       },
       error => {
-        commit(types.GET_ENTITY_LIST.FAIL, error);
+        commit(types.GET_ENTITIES.FAIL, error);
 
         return dispatch(
           ADD_TOAST_MESSAGE,
@@ -33,44 +45,7 @@ export const getPostsList = (context, params) => {
       },
     )
     .catch(error => {
-      commit(types.GET_ENTITY_LIST.FAIL, error);
-
-      return dispatch(
-        ADD_TOAST_MESSAGE,
-        { text: error, type: 'danger' },
-        { root: true },
-      );
-    });
-};
-
-export const getCommentsList = (context, params) => {
-  const { commit, dispatch } = context;
-
-  commit(types.GET_ENTITY_LIST.REQUEST);
-
-  Api.get(routes.searchComments, params)
-    .then(
-      response => {
-        const { data } = response;
-        const payload = {
-          list: ResultPresenter.items(data),
-          total: ResultPresenter.total(data),
-        };
-
-        commit(types.GET_ENTITY_LIST.SUCCESS, payload);
-      },
-      error => {
-        commit(types.GET_ENTITY_LIST.FAIL, error);
-
-        return dispatch(
-          ADD_TOAST_MESSAGE,
-          { text: error, type: 'danger' },
-          { root: true },
-        );
-      },
-    )
-    .catch(error => {
-      commit(types.GET_ENTITY_LIST.FAIL, error);
+      commit(types.GET_ENTITIES.FAIL, error);
 
       return dispatch(
         ADD_TOAST_MESSAGE,

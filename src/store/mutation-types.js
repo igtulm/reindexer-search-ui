@@ -1,7 +1,7 @@
 import createAsyncConstant from '@/utils/createAsyncConstant';
 
 const asyncConstants = {
-  GET_ENTITY_LIST: createAsyncConstant('getEntityList'),
+  GET_ENTITIES: createAsyncConstant('getEntityList'),
 };
 
 export default {
