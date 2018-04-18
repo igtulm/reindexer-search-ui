@@ -20,19 +20,19 @@
             <b-form-radio-group v-model="searchMode" @change="onSortModeChange">
               <b-form-radio v-for="option, index in searchOptions" :key="index" :value="option">{{ option }}</b-form-radio>
             </b-form-radio-group>
-            <b-form-select v-model="params.sortBy" :options="sortOptions" @change="onSearch" />
+            <b-form-select v-model="params.sortBy" :options="sortOptions" @change="onSortByChange" />
             <b-form-select
               class="ml-2"
               v-model="params.sortDesc"
               :options="sortDirOptions"
               :disabled="!isSortTypeDirected"
-              @change="onSearch" />
+              @change="onSortDescChange" />
           </b-form>
         </b-col>
       </b-row>
       <b-row class="mt-4">
         <b-col>
-          <div v-infinite-scroll="loadMore" :infinite-scroll-disabled="isScrollBusy">
+          <div v-infinite-scroll="onScroll" :infinite-scroll-disabled="isScrollBusy">
             <component v-for="item, index in items" :is="component" v-bind="item" :key="index" />
           </div>
         </b-col>
@@ -248,24 +248,28 @@ export default {
     onSortModeChange(text) {
       const searchSetting = this.searchSettings.find(item => item.text === text);
       this.params.searchType = searchSetting.value;
+      this.params.offset = 0;
+
+      this.onSearch();
+    },
+
+    onSortByChange() {
+      this.params.offset = 0;
+
+      this.onSearch();
+    },
+
+    onSortDescChange() {
+      this.params.offset = 0;
 
       this.onSearch();
     },
 
     onInput(value) {
       this.params.query = value;
+      this.params.offset = 0;
 
       this.onSearch();
-    },
-
-    onPaginatorChange(page) {
-      this.page = page;
-
-      this.onSearch();
-    },
-
-    loadMore() {
-      this.onScroll();
     },
   },
 
