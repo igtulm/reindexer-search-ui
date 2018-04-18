@@ -27,7 +27,7 @@ export const getEntities = (context, params) => {
       response => {
         const { data } = response;
         const payload = {
-          list: ResultPresenter.items(data),
+          items: ResultPresenter.items(data),
           total: ResultPresenter.total(data),
           isGreedy,
         };

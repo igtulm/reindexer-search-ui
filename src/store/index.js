@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createLogger from 'vuex/dist/logger';
 import { createModule } from 'vuex-toast';
-
 import * as actions from './actions';
 import mutations from './mutations';
 
@@ -11,7 +10,7 @@ Vue.use(Vuex);
 const debug = process.env.NODE_ENV !== 'production';
 
 const state = {
-  list: [],
+  items: [],
   total: 0,
   isLoading: false,
 };

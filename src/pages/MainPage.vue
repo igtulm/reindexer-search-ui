@@ -152,7 +152,7 @@ export default {
 
   computed: {
     ...mapState({
-      items: state => state.list,
+      items: state => state.items,
       total: state => state.total,
     }),
 

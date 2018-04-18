@@ -8,9 +8,9 @@ export default {
     state.isLoading = false;
   },
   [types.GET_ENTITIES.SUCCESS](state, payload) {
-    const { list, total, isGreedy } = payload;
+    const { items, total, isGreedy } = payload;
 
-    state.list = isGreedy ? [...state.list, list] : list;
+    state.items = isGreedy ? [...state.items, items] : items;
     state.total = total;
     state.isLoading = false;
   },
