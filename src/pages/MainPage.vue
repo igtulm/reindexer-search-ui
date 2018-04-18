@@ -115,12 +115,12 @@ export default {
     const searchSettings = [{
       text: 'Posts',
       value: 'posts',
-      action: 'getPostsByQuery',
+      action: 'getPostsList',
       debounce: 250,
     }, {
       text: 'Comments',
       value: 'comments',
-      action: 'getCommentsByQuery',
+      action: 'getCommentsList',
       debounce: 100,
     }];
 

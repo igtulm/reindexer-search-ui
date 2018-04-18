@@ -4,10 +4,12 @@ import routes from '@/api/routes';
 import ResultPresenter from '@/presenters/ResultPresenter';
 import types from './mutation-types';
 
-export const getPostsByQuery = (context, params) => {
+// TODO get entity factory
+
+export const getPostsList = (context, params) => {
   const { commit, dispatch } = context;
 
-  commit(types.POSTS_GET_BY_QUERY.REQUEST);
+  commit(types.GET_ENTITY_LIST.REQUEST);
 
   Api.get(routes.searchPosts, params)
     .then(
@@ -18,10 +20,10 @@ export const getPostsByQuery = (context, params) => {
           total: ResultPresenter.total(data),
         };
 
-        commit(types.POSTS_GET_BY_QUERY.SUCCESS, payload);
+        commit(types.GET_ENTITY_LIST.SUCCESS, payload);
       },
       error => {
-        commit(types.POSTS_GET_BY_QUERY.FAIL, error);
+        commit(types.GET_ENTITY_LIST.FAIL, error);
 
         return dispatch(
           ADD_TOAST_MESSAGE,
@@ -31,7 +33,7 @@ export const getPostsByQuery = (context, params) => {
       },
     )
     .catch(error => {
-      commit(types.POSTS_GET_BY_QUERY.FAIL, error);
+      commit(types.GET_ENTITY_LIST.FAIL, error);
 
       return dispatch(
         ADD_TOAST_MESSAGE,
@@ -41,10 +43,10 @@ export const getPostsByQuery = (context, params) => {
     });
 };
 
-export const getCommentsByQuery = (context, params) => {
+export const getCommentsList = (context, params) => {
   const { commit, dispatch } = context;
 
-  commit(types.COMMENTS_GET_BY_QUERY.REQUEST);
+  commit(types.GET_ENTITY_LIST.REQUEST);
 
   Api.get(routes.searchComments, params)
     .then(
@@ -55,10 +57,10 @@ export const getCommentsByQuery = (context, params) => {
           total: ResultPresenter.total(data),
         };
 
-        commit(types.COMMENTS_GET_BY_QUERY.SUCCESS, payload);
+        commit(types.GET_ENTITY_LIST.SUCCESS, payload);
       },
       error => {
-        commit(types.COMMENTS_GET_BY_QUERY.FAIL, error);
+        commit(types.GET_ENTITY_LIST.FAIL, error);
 
         return dispatch(
           ADD_TOAST_MESSAGE,
@@ -68,7 +70,7 @@ export const getCommentsByQuery = (context, params) => {
       },
     )
     .catch(error => {
-      commit(types.COMMENTS_GET_BY_QUERY.FAIL, error);
+      commit(types.GET_ENTITY_LIST.FAIL, error);
 
       return dispatch(
         ADD_TOAST_MESSAGE,
