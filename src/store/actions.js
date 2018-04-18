@@ -1,7 +1,7 @@
 import { ADD_TOAST_MESSAGE } from 'vuex-toast';
 import Api from '@/api';
 import routes from '@/api/routes';
-import resultGetter from '@/utils/resultGetter';
+import ResultPresenter from '@/presenters/ResultPresenter';
 import types from './mutation-types';
 
 export const getPostsByQuery = (context, params) => {
@@ -14,8 +14,8 @@ export const getPostsByQuery = (context, params) => {
       response => {
         const { data } = response;
         const payload = {
-          list: resultGetter.items(data),
-          total: resultGetter.total(data),
+          list: ResultPresenter.items(data),
+          total: ResultPresenter.total(data),
         };
 
         commit(types.POSTS_GET_BY_QUERY.SUCCESS, payload);
@@ -51,8 +51,8 @@ export const getCommentsByQuery = (context, params) => {
       response => {
         const { data } = response;
         const payload = {
-          list: resultGetter.items(data),
-          total: resultGetter.total(data),
+          list: ResultPresenter.items(data),
+          total: ResultPresenter.total(data),
         };
 
         commit(types.COMMENTS_GET_BY_QUERY.SUCCESS, payload);
