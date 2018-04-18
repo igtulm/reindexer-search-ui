@@ -32,13 +32,10 @@
       </b-row>
       <b-row class="mt-4">
         <b-col>
-          <component v-for="item, index in items" :is="component" v-bind="item" :key="index" />
+          <div v-infinite-scroll="loadMore" :infinite-scroll-disabled="isScrollBusy">
+            <component v-for="item, index in items" :is="component" v-bind="item" :key="index" />
+          </div>
         </b-col>
-      </b-row>
-      <b-row>
-        <!--<b-pagination v-if="total" size="md" hide-ellipsis :limit="params.limit" :total-rows="total"
-            :per-page="10" v-model="page" v-on:input="onPaginatorChange">
-        </b-pagination>-->
       </b-row>
     </b-container>
   </div>
@@ -147,6 +144,8 @@ export default {
       params: {
         ...props,
       },
+
+      isScrollBusy: false,
     };
   },
 
@@ -197,6 +196,10 @@ export default {
 
       return sortOption.isDirected || false;
     },
+
+    itemsSize() {
+      return _.size(this.items);
+    }
   },
 
   methods: {
@@ -212,7 +215,32 @@ export default {
       };
 
       this.getEntities(actionParams).then(() => {
-        this.$router.push({ path: this.$router.path, queryParams });
+        this.$router.push({ path: this.$router.path, query: queryParams });
+      });
+
+    }, this.debounce),
+
+    onScroll: _.debounce(function() {
+      if (this.busy || this.itemsSize === 0) {
+        return;
+      }
+
+      const compactQueryParams = _.pickBy(this.params);
+      const queryParams = {
+        ...compactQueryParams,
+        offset: this.offset + this.limit,
+      };
+
+      const actionParams = {
+        queryParams,
+        entity: this.entity,
+        isGreedy: true,
+      };
+
+      this.isScrollBusy = true;
+      this.getEntities(actionParams).then(() => {
+        this.isScrollBusy = false;
+        this.$router.push({ path: this.$router.path, query: queryParams });
       });
 
     }, this.debounce),
@@ -234,6 +262,10 @@ export default {
       this.page = page;
 
       this.onSearch();
+    },
+
+    loadMore() {
+      this.onScroll();
     },
   },
 
