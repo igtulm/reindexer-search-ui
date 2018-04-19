@@ -146,6 +146,7 @@ export default {
       },
 
       isScrollBusy: false,
+      scrollOffset: props.offset || 0,
     };
   },
 
@@ -226,9 +227,10 @@ export default {
       }
 
       const compactQueryParams = _.pickBy(this.params);
+      this.scrollOffset = this.scrollOffset + this.limit;
       const queryParams = {
         ...compactQueryParams,
-        offset: this.offset + this.limit,
+        offset: this.scrollOffset,
       };
 
       const actionParams = {
@@ -240,9 +242,7 @@ export default {
       this.isScrollBusy = true;
       this.getEntities(actionParams).then(() => {
         this.isScrollBusy = false;
-        this.$router.push({ path: this.$router.path, query: queryParams });
       });
-
     }, this.debounce),
 
     onSortModeChange(text) {

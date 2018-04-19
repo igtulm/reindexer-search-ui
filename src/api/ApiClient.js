@@ -16,20 +16,22 @@ export default class BaseApiClient {
     this._sources = {};
   }
 
-  get(url = '', params = {}) {
+  get(url = '', params = {}, isCancellable = false) {
     const source = this._sources[url];
 
-    if (source) {
-      source.cancel();
+    if (isCancellable) {
+      if (source) {
+        source.cancel();
+      }
+
+      const newSource = CancelToken.source();
+      this._sources[url] = newSource;
+
+      this.metadata = {
+        ...this.metadata,
+        cancelToken: newSource.token,
+      };
     }
-
-    const newSource = CancelToken.source();
-    this._sources[url] = newSource;
-
-    this.metadata = {
-      ...this.metadata,
-      cancelToken: newSource.token,
-    };
 
     if (_.isEmpty(params)) {
       return axios.get(urljoin(this.baseurl, url), this.metadata);

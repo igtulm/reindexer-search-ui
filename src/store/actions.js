@@ -22,7 +22,9 @@ export const getEntities = (context, params) => {
 
   commit(types.GET_ENTITIES.REQUEST);
 
-  EntitiesApi.get(route, queryParams)
+  const isCancellableRequest = !isGreedy;
+
+  EntitiesApi.get(route, queryParams, isCancellableRequest)
     .then(
       response => {
         const { data } = response;
