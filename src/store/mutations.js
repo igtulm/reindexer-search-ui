@@ -10,7 +10,12 @@ export default {
   [types.GET_ENTITIES.SUCCESS](state, payload) {
     const { items, total, isGreedy } = payload;
 
-    state.items = isGreedy ? [...state.items, items] : items;
+    if (isGreedy && items.length > 0) {
+      state.items = [...state.items, ...items];
+    } else {
+      state.items = items;
+    }
+
     state.total = total;
     state.isLoading = false;
   },

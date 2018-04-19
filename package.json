@@ -21,6 +21,7 @@
     "normalize.css": "^8.0.0",
     "url-join": "^4.0.0",
     "vue": "^2.5.2",
+    "vue-infinite-scroll": "^2.0.2",
     "vue-octicon": "^2.1.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",

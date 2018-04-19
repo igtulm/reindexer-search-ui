@@ -20,25 +20,22 @@
             <b-form-radio-group v-model="searchMode" @change="onSortModeChange">
               <b-form-radio v-for="option, index in searchOptions" :key="index" :value="option">{{ option }}</b-form-radio>
             </b-form-radio-group>
-            <b-form-select v-model="params.sortBy" :options="sortOptions" @change="onSearch" />
+            <b-form-select v-model="params.sortBy" :options="sortOptions" @change="onSortByChange" />
             <b-form-select
               class="ml-2"
               v-model="params.sortDesc"
               :options="sortDirOptions"
               :disabled="!isSortTypeDirected"
-              @change="onSearch" />
+              @change="onSortDescChange" />
           </b-form>
         </b-col>
       </b-row>
       <b-row class="mt-4">
         <b-col>
-          <component v-for="item, index in items" :is="component" v-bind="item" :key="index" />
+          <div v-infinite-scroll="onScroll" :infinite-scroll-disabled="isScrollBusy">
+            <component v-for="item, index in items" :is="component" v-bind="item" :key="index" />
+          </div>
         </b-col>
-      </b-row>
-      <b-row>
-        <!--<b-pagination v-if="total" size="md" hide-ellipsis :limit="params.limit" :total-rows="total"
-            :per-page="10" v-model="page" v-on:input="onPaginatorChange">
-        </b-pagination>-->
       </b-row>
     </b-container>
   </div>
@@ -147,6 +144,8 @@ export default {
       params: {
         ...props,
       },
+
+      isScrollBusy: false,
     };
   },
 
@@ -197,6 +196,10 @@ export default {
 
       return sortOption.isDirected || false;
     },
+
+    itemsSize() {
+      return _.size(this.items);
+    }
   },
 
   methods: {
@@ -212,7 +215,32 @@ export default {
       };
 
       this.getEntities(actionParams).then(() => {
-        this.$router.push({ path: this.$router.path, queryParams });
+        this.$router.push({ path: this.$router.path, query: queryParams });
+      });
+
+    }, this.debounce),
+
+    onScroll: _.debounce(function() {
+      if (this.busy || this.itemsSize === 0) {
+        return;
+      }
+
+      const compactQueryParams = _.pickBy(this.params);
+      const queryParams = {
+        ...compactQueryParams,
+        offset: this.offset + this.limit,
+      };
+
+      const actionParams = {
+        queryParams,
+        entity: this.entity,
+        isGreedy: true,
+      };
+
+      this.isScrollBusy = true;
+      this.getEntities(actionParams).then(() => {
+        this.isScrollBusy = false;
+        this.$router.push({ path: this.$router.path, query: queryParams });
       });
 
     }, this.debounce),
@@ -220,18 +248,26 @@ export default {
     onSortModeChange(text) {
       const searchSetting = this.searchSettings.find(item => item.text === text);
       this.params.searchType = searchSetting.value;
+      this.params.offset = 0;
+
+      this.onSearch();
+    },
+
+    onSortByChange() {
+      this.params.offset = 0;
+
+      this.onSearch();
+    },
+
+    onSortDescChange() {
+      this.params.offset = 0;
 
       this.onSearch();
     },
 
     onInput(value) {
       this.params.query = value;
-
-      this.onSearch();
-    },
-
-    onPaginatorChange(page) {
-      this.page = page;
+      this.params.offset = 0;
 
       this.onSearch();
     },
