@@ -1,5 +1,5 @@
 import { ADD_TOAST_MESSAGE } from 'vuex-toast';
-import Api from '@/api';
+import EntitiesApi from '@/api';
 import routes from '@/api/routes';
 import ResultPresenter from '@/presenters/ResultPresenter';
 import types from './mutation-types';
@@ -22,7 +22,7 @@ export const getEntities = (context, params) => {
 
   commit(types.GET_ENTITIES.REQUEST);
 
-  Api.get(route, queryParams)
+  EntitiesApi.get(route, queryParams)
     .then(
       response => {
         const { data } = response;
@@ -35,6 +35,10 @@ export const getEntities = (context, params) => {
         commit(types.GET_ENTITIES.SUCCESS, payload);
       },
       error => {
+        if (EntitiesApi.isCancel(error)) {
+          return;
+        }
+
         commit(types.GET_ENTITIES.FAIL, error);
 
         return dispatch(
