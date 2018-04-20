@@ -42,8 +42,7 @@
           <spinner
             v-if="isLoading"
             size="large"
-            class="float-left"
-            :class="{ 'position-fixed fixed-bottom mb-2': itemsSize }"
+            class="position-fixed fixed-bottom mb-2"
           />
         </b-col>
       </b-row>
@@ -235,7 +234,7 @@ export default {
     }, this.debounce),
 
     onScroll: _.debounce(function() {
-      if (this.isScrollBusy || this.itemsSize === 0) {
+      if (this.isScrollBusy || this.itemsSize === 0 || this.itemsSize === this.total) {
         return;
       }
 
@@ -262,18 +261,21 @@ export default {
       const searchSetting = this.searchSettings.find(item => item.text === text);
       this.params.searchType = searchSetting.value;
       this.params.offset = 0;
+      this.scrollOffset = 0;
 
       this.onSearch();
     },
 
     onSortByChange() {
       this.params.offset = 0;
+      this.scrollOffset = 0;
 
       this.onSearch();
     },
 
     onSortDescChange() {
       this.params.offset = 0;
+      this.scrollOffset = 0;
 
       this.onSearch();
     },
@@ -281,6 +283,7 @@ export default {
     onInput(value) {
       this.params.query = value;
       this.params.offset = 0;
+      this.scrollOffset = 0;
 
       this.onSearch();
     },
