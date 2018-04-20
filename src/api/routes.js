@@ -1,8 +1,7 @@
 // dynamic route example /some/:0/path/:1/or/:2/anything/:3
 
 const routes = {
-  searchPosts: '/search_posts',
-  searchComments: '/search_comments',
+  search: '/search',
 };
 
 export function routeConstructor(route = '', ...args) {

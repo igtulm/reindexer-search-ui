@@ -103,13 +103,11 @@ export default {
     const props = this.$props;
 
     const searchSettings = [{
-      name: 'Posts',
       text: 'Posts',
       value: 'posts',
       debounce: 250,
       component: SnippetPost,
     }, {
-      name: 'Posts',
       text: 'Comments',
       value: 'comments',
       debounce: 100,
@@ -147,7 +145,6 @@ export default {
       sortOptions,
       sortDirOptions,
 
-      debounceDefault: 250,
       page: 1,
       searchMode,
 
@@ -170,14 +167,6 @@ export default {
       return this.searchSettings.find(item => item &&  item.text === this.searchMode);
     },
 
-    entity() {
-      if (_.isEmpty(this.currentSetting)) {
-        return null;
-      }
-
-      return _.get(this.currentSetting, 'name', null);
-    },
-
     component() {
       if (_.isEmpty(this.currentSetting)) {
         return '';
@@ -188,10 +177,10 @@ export default {
 
     debounce() {
       if (_.isEmpty(this.currentSetting)) {
-        return this.debounceDefault;
+        return 0;
       }
 
-      return _.get(this.currentSetting, 'debounce', this.debounceDefault);
+      return _.get(this.currentSetting, 'debounce', 0);
     },
 
     action() {
@@ -222,11 +211,12 @@ export default {
       const queryParams = _.pickBy(this.params);
       const actionParams = {
         queryParams,
-        entity: this.entity,
       };
 
       this.getEntities(actionParams);
-      this.$router.push({ path: this.$router.path, query: queryParams });
+
+      const query = _.mapKeys(queryParams, (value, key) => _.snakeCase(key));
+      this.$router.push({ path: this.$router.path, query });
 
     }, this.debounce),
 
@@ -244,7 +234,6 @@ export default {
 
       const actionParams = {
         queryParams,
-        entity: this.entity,
         isGreedy: true,
       };
 

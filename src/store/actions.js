@@ -6,25 +6,13 @@ import types from './mutation-types';
 
 export const getEntities = (context, params) => {
   const { commit, dispatch } = context;
-  const { entity, isGreedy, queryParams } = params;
-
-  let route;
-  switch (entity) {
-    case 'Posts':
-      route = routes.searchPosts;
-      break;
-    case 'Comments':
-      route = routes.searchComments;
-      break;
-    default:
-      return;
-  }
+  const { isGreedy, queryParams } = params;
 
   commit(types.GET_ENTITIES.REQUEST);
 
   const isCancellableRequest = !isGreedy;
 
-  EntitiesApi.get(route, queryParams, isCancellableRequest)
+  EntitiesApi.get(routes.search, queryParams, isCancellableRequest)
     .then(
       response => {
         const { data } = response;

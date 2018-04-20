@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import humps from 'humps';
 import Router from 'vue-router';
 import MainPage from '@/pages/MainPage';
 import NotFoundPage from '@/pages/NotFoundPage';
@@ -15,7 +16,7 @@ export default new Router({
       name: 'MainPage',
       component: MainPage,
       props: route => {
-        const params = route.query;
+        const params = humps.camelizeKeys(route.query);
         const { query, searchType, sortBy } = params;
 
         // TODO refactoring
