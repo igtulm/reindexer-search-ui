@@ -32,7 +32,7 @@
       </b-row>
       <b-row class="mt-4">
         <b-col>
-          <div v-infinite-scroll="onScroll" :infinite-scroll-disabled="isScrollBusy" >
+          <div v-infinite-scroll="onScroll">
             <component v-for="item, index in items" :is="component" v-bind="item" :key="index" />
           </div>
         </b-col>
@@ -156,7 +156,6 @@ export default {
         ...props,
       },
 
-      isScrollBusy: false,
       scrollOffset: props.offset || 0,
     };
   },
@@ -233,7 +232,7 @@ export default {
 
     }, this.debounce),
 
-    onScroll: _.debounce(function() {
+    onScroll() {
       if (this.isScrollBusy || this.itemsSize === 0 || this.itemsSize === this.total) {
         return;
       }
@@ -251,11 +250,8 @@ export default {
         isGreedy: true,
       };
 
-      this.isScrollBusy = true;
-      this.getEntities(actionParams).then(() => {
-        this.isScrollBusy = false;
-      });
-    }, this.debounce),
+      this.getEntities(actionParams);
+    },
 
     onSortModeChange(text) {
       const searchSetting = this.searchSettings.find(item => item.text === text);
