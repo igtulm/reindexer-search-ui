@@ -40,7 +40,7 @@
       <b-row>
         <b-col>
           <spinner
-            v-if="isLoading"
+            v-show="isLoading"
             size="large"
             class="position-fixed fixed-bottom mb-2"
           />
@@ -59,7 +59,7 @@ import SnippetPost from '@/components/SnippetPost';
 import SnippetComment from '@/components/SnippetComment';
 
 export default {
-  name: 'search-page',
+  name: 'main-page',
 
   components: {
     Toast,
@@ -149,14 +149,13 @@ export default {
 
       debounceDefault: 250,
       page: 1,
-      tabNumSelected: 0,
       searchMode,
 
       params: {
         ...props,
       },
 
-      scrollOffset: props.offset || 0,
+      scrollOffset: props.offset,
     };
   },
 
@@ -226,14 +225,13 @@ export default {
         entity: this.entity,
       };
 
-      this.getEntities(actionParams).then(() => {
-        this.$router.push({ path: this.$router.path, query: queryParams });
-      });
+      this.getEntities(actionParams);
+      this.$router.push({ path: this.$router.path, query: queryParams });
 
     }, this.debounce),
 
     onScroll() {
-      if (this.isScrollBusy || this.itemsSize === 0 || this.itemsSize === this.total) {
+      if (this.itemsSize === 0 || this.itemsSize === this.total) {
         return;
       }
 
@@ -283,12 +281,24 @@ export default {
 
       this.onSearch();
     },
+
+    mousewheelHandler(event) {
+      if (event.deltaY === 1) {
+        event.preventDefault();
+      }
+    }
   },
 
   created() {
+    window.addEventListener('mousewheel', this.mousewheelHandler);
+
     if (this.params.query) {
       this.onSearch();
     }
+  },
+
+  destroyed() {
+    window.removeEventListener('mousewheel', this.mousewheelHandler);
   },
 };
 </script>
