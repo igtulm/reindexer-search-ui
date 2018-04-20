@@ -24,6 +24,7 @@
     "vue-infinite-scroll": "^2.0.2",
     "vue-octicon": "^2.1.1",
     "vue-router": "^3.0.1",
+    "vue-simple-spinner": "^1.2.8",
     "vuex": "^3.0.1",
     "vuex-toast": "^0.1.3"
   },

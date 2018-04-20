@@ -32,9 +32,19 @@
       </b-row>
       <b-row class="mt-4">
         <b-col>
-          <div v-infinite-scroll="onScroll" :infinite-scroll-disabled="isScrollBusy">
+          <div v-infinite-scroll="onScroll" :infinite-scroll-disabled="isScrollBusy" >
             <component v-for="item, index in items" :is="component" v-bind="item" :key="index" />
           </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <spinner
+            v-if="isLoading"
+            size="large"
+            class="float-left"
+            :class="{ 'position-fixed fixed-bottom mb-2': itemsSize }"
+          />
         </b-col>
       </b-row>
     </b-container>
@@ -45,6 +55,7 @@
 import _ from 'lodash';
 import { mapActions, mapState } from 'vuex';
 import { Toast } from 'vuex-toast';
+import Spinner from 'vue-simple-spinner'
 import SnippetPost from '@/components/SnippetPost';
 import SnippetComment from '@/components/SnippetComment';
 
@@ -53,6 +64,7 @@ export default {
 
   components: {
     Toast,
+    Spinner,
     SnippetPost,
     SnippetComment,
   },
@@ -154,6 +166,7 @@ export default {
     ...mapState({
       items: state => state.items,
       total: state => state.total,
+      isLoading: state => state.isLoading,
     }),
 
     currentSetting() {
@@ -222,7 +235,7 @@ export default {
     }, this.debounce),
 
     onScroll: _.debounce(function() {
-      if (this.busy || this.itemsSize === 0) {
+      if (this.isScrollBusy || this.itemsSize === 0) {
         return;
       }
 
