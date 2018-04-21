@@ -17,13 +17,9 @@ export default new Router({
       component: MainPage,
       props: route => {
         const params = humps.camelizeKeys(route.query);
-        const { query, searchType, sortBy } = params;
 
-        // TODO refactoring
         const newParams = {
-          query,
-          searchType,
-          sortBy,
+          ...params,
           limit: parseInt(params.limit, 10) || 10,
           offset: parseInt(params.offset, 10) || 0,
           sortDesc: parseInt(params.sortDesc, 10) || 0,
