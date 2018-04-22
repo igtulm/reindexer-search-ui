@@ -18,15 +18,11 @@ export default new Router({
       props: route => {
         const params = humps.camelizeKeys(route.query);
 
-        const newParams = {
+        return {
           ...params,
           limit: parseInt(params.limit, 10) || 10,
           offset: parseInt(params.offset, 10) || 0,
           sortDesc: parseInt(params.sortDesc, 10) || 0,
-        };
-
-        return {
-          ...newParams,
         };
       },
     },
