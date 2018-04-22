@@ -221,7 +221,7 @@ export default {
     }, this.debounce),
 
     onScroll() {
-      if (this.itemsSize === 0 || this.itemsSize === this.total) {
+      if (this.isLoading || this.itemsSize === 0 || this.itemsSize === this.total) {
         return;
       }
 
