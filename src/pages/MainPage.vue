@@ -32,7 +32,7 @@
       </b-row>
       <b-row class="mt-3">
         <b-col>
-          <h6 v-if="timeElapsed">Found {{ total }} results in {{ timeElapsed }} ms</h6>
+          <h6 v-if="itemsSize">Found {{ total }} results in {{ elapsedMs }} ms</h6>
         </b-col>
       </b-row>
       <b-row class="mt-4">
@@ -165,6 +165,7 @@ export default {
     ...mapState({
       items: state => state.items,
       total: state => state.total,
+      elapsedMs: state => state.elapsedMs,
       isLoading: state => state.isLoading,
       requestPerformanceMs: state => state.requestPerformanceMs,
     }),
@@ -209,12 +210,6 @@ export default {
 
     performance() {
       return this.requestPerformanceMs.toFixed(1) || null;
-    },
-
-    timeElapsed() {
-      const { elapsedMs } = this.items;
-
-      return elapsedMs || null;
     },
   },
 

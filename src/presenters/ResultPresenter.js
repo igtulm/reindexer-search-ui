@@ -6,8 +6,10 @@ export default {
   },
 
   total(data) {
-    const total = _.get(data, 'total_count', 0);
+    return _.get(data, 'total_count', 0);
+  },
 
-    return total;
+  elapsedMs(data) {
+    return _.get(data, 'elapsed_ms', 0);
   },
 };

@@ -12,6 +12,7 @@ const debug = process.env.NODE_ENV !== 'production';
 const state = {
   items: [],
   total: 0,
+  elapsedMs: null,
   isLoading: false,
   requestPerformanceMs: null,
 };

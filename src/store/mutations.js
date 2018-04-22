@@ -6,13 +6,15 @@ export default {
   },
   [types.GET_ENTITIES.FAIL](state) {
     state.isLoading = false;
-    requestPerformanceMs: null;
+    elapsedMs = null;
+    requestPerformanceMs = null;
   },
   [types.GET_ENTITIES.SUCCESS](state, payload) {
-    const { items, total, isGreedy, requestPerformanceMs } = payload;
+    const { items, total, elapsedMs, isGreedy, requestPerformanceMs } = payload;
 
     state.items = isGreedy ? [...state.items, ...items] : items;
     state.total = total;
+    state.elapsedMs = elapsedMs;
     state.isLoading = false;
     state.requestPerformanceMs = requestPerformanceMs;
   },

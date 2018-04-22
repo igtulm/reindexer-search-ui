@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://habr-demo.reindexer.org:8881',
+        target: 'http://habr-demo.reindexer.org',
       },
     },
 

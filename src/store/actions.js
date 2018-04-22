@@ -22,6 +22,7 @@ export const getEntities = (context, params) => {
         const payload = {
           items: ResultPresenter.items(data),
           total: ResultPresenter.total(data),
+          elapsedMs: ResultPresenter.elapsedMs(data),
           isGreedy,
           requestPerformanceMs: requestEndTime - requestStartTime,
         };
