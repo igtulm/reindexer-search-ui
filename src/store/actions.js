@@ -12,14 +12,18 @@ export const getEntities = (context, params) => {
 
   const isCancellableRequest = !isGreedy;
 
+  const requestStartTime = performance.now();
   EntitiesApi.get(routes.search, queryParams, isCancellableRequest)
     .then(
       response => {
+        const requestEndTime = performance.now();
+
         const { data } = response;
         const payload = {
           items: ResultPresenter.items(data),
           total: ResultPresenter.total(data),
           isGreedy,
+          requestPerformanceMs: requestEndTime - requestStartTime,
         };
 
         commit(types.GET_ENTITIES.SUCCESS, payload);

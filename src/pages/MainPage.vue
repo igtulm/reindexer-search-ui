@@ -30,6 +30,11 @@
           </b-form>
         </b-col>
       </b-row>
+      <b-row class="mt-3">
+        <b-col>
+          <h6 v-if="itemsSize && performance">Found {{ total }} results in {{ performance }} ms</h6>
+        </b-col>
+      </b-row>
       <b-row class="mt-4">
         <b-col>
           <div v-infinite-scroll="onScroll">
@@ -161,6 +166,7 @@ export default {
       items: state => state.items,
       total: state => state.total,
       isLoading: state => state.isLoading,
+      requestPerformanceMs: state => state.requestPerformanceMs,
     }),
 
     currentSetting() {
@@ -199,7 +205,11 @@ export default {
 
     itemsSize() {
       return _.size(this.items);
-    }
+    },
+
+    performance() {
+      return this.requestPerformanceMs.toFixed(1) || null;
+    },
   },
 
   methods: {

@@ -13,6 +13,7 @@ const state = {
   items: [],
   total: 0,
   isLoading: false,
+  requestPerformanceMs: null,
 };
 
 export default new Vuex.Store({
