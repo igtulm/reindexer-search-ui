@@ -12,6 +12,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         target: 'http://habr-demo.reindexer.org',
+        changeOrigin: true,
       },
     },
 
