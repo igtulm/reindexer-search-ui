@@ -52,6 +52,11 @@ export default {
       type: Number,
       default: 0,
     },
+
+    link: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
