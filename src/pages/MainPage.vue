@@ -32,7 +32,7 @@
       </b-row>
       <b-row class="mt-3">
         <b-col>
-          <h6 v-if="itemsSize && performance">Found {{ total }} results in {{ performance }} ms</h6>
+          <h6 v-if="timeElapsed">Found {{ total }} results in {{ timeElapsed }} ms</h6>
         </b-col>
       </b-row>
       <b-row class="mt-4">
@@ -210,12 +210,23 @@ export default {
     performance() {
       return this.requestPerformanceMs.toFixed(1) || null;
     },
+
+    timeElapsed() {
+      const { elapsedMs } = this.items;
+
+      return elapsedMs || null;
+    },
   },
 
   methods: {
     ...mapActions({
       getEntities: 'getEntities',
     }),
+
+    offsetReset() {
+      this.params.offset = 0;
+      this.scrollOffset = 0;
+    },
 
     onSearch: _.debounce(function() {
       const queryParams = _.pickBy(this.params);
@@ -256,27 +267,26 @@ export default {
       this.params.offset = 0;
       this.scrollOffset = 0;
 
+      this.offsetReset();
+
       this.onSearch();
     },
 
     onSortByChange() {
-      this.params.offset = 0;
-      this.scrollOffset = 0;
+      this.offsetReset();
 
       this.onSearch();
     },
 
     onSortDescChange() {
-      this.params.offset = 0;
-      this.scrollOffset = 0;
+      this.offsetReset();
 
       this.onSearch();
     },
 
     onInput(value) {
       this.params.query = value;
-      this.params.offset = 0;
-      this.scrollOffset = 0;
+      this.offsetReset();
 
       this.onSearch();
     },
