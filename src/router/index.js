@@ -20,7 +20,7 @@ export default new Router({
 
         return {
           ...params,
-          query: decodeURIComponent(params.query) || '',
+          query: params.query ? decodeURIComponent(params.query) : '',
           limit: parseInt(params.limit, 10) || 10,
           offset: parseInt(params.offset, 10) || 0,
           sortDesc: parseInt(params.sortDesc, 10) || 0,
